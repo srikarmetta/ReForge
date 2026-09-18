@@ -1,51 +1,29 @@
-﻿<div align="center">
+﻿# ReForge
 
-# ReForge
-### Autonomous Codebase Intelligence & Any-to-Any Software Modernization Platform
+**Codebase Intelligence & Software Migration Platform**
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
-[![React](https://img.shields.io/badge/React-18.2-61DAFB.svg?style=flat&logo=react&logoColor=black)](https://reactjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-3178C6.svg?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.3-38B2AC.svg?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![Monaco Editor](https://img.shields.io/badge/Monaco_Editor-0.44-blue.svg?style=flat&logo=visual-studio-code&logoColor=white)](https://microsoft.github.io/monaco-editor/)
-[![NetworkX](https://img.shields.io/badge/NetworkX-3.2+-orange.svg?style=flat)](https://networkx.org)
-[![Tests](https://img.shields.io/badge/Tests-5%2F5%20Passing-brightgreen.svg?style=flat&logo=pytest&logoColor=white)](https://docs.pytest.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
-
-<p align="center">
-  <strong>Understand any codebase. Quantify impact. Migrate to any modern stack with verified parity.</strong>
-</p>
-
-[Key Features](#-core-capabilities--modules) •
-[Architecture](#-system-architecture) •
-[Quick Start](#-quick-start-guide) •
-[Migration Matrix](#-supported-migration-matrix) •
-[Testing](#-running-automated-tests) •
-[Project Structure](#-project-structure)
-
-</div>
+Understand any codebase. Quantify impact. Migrate to any modern stack with verified parity.
 
 ---
 
-##  Executive Summary
+## Overview
 
-Software migration and legacy refactoring represent a **$3.6 trillion technical debt barrier** globally. Enterprises remain locked into obsolete runtimes, unmaintained frameworks, and monolithic architectures because manual rewrites are:
-- **Costly & Multi-Year**: Requiring large teams of specialized legacy developers.
+Software migration and legacy refactoring represent a major barrier for engineering organizations. Enterprises remain locked into obsolete runtimes, unmaintained frameworks, and monolithic architectures because manual rewrites are:
+- **Costly & Multi-Year**: Requiring large teams of specialized developers.
 - **Prone to Severe Regressions**: Subtle behavioral discrepancies, missing edge cases, and untested side-effects.
-- **Knowledge-Deficient**: Original system architects have long departed, leaving undocumented logic and implicit dependencies.
+- **Knowledge-Deficient**: Original system architects have moved on, leaving undocumented logic and implicit dependencies.
 
-**ReForge** is an agentic software intelligence and automated modernization platform that solves this dual challenge:
-1. **Deep Codebase Intelligence**: Ingests arbitrary codebases (Python, JavaScript, TypeScript, Go, Java), constructs deterministic Abstract Syntax Tree (AST) symbol models, computes directed dependency graphs, performs graph-traversal blast-radius impact analysis, and provides evidence-grounded RAG codebase chat with file-level and line-level citations.
-2. **Any-to-Any Migration Pipeline**: Synthesizes architecture plans, generates production-ready target codebases across leading enterprise stacks (Java 21 / Spring Boot 3.2, Python / FastAPI, Go / Gin, TypeScript / NestJS), renders live side-by-side Monaco diffs with semantic explainability, streams multi-agent activity over WebSockets, and enforces contract parity through behavioral verification and autonomous self-repair.
+ReForge is an automated software intelligence and codebase modernization platform that solves this dual challenge:
+1. **Deep Codebase Intelligence**: Ingests arbitrary codebases (Python, JavaScript, TypeScript, Go, Java), constructs deterministic Abstract Syntax Tree (AST) symbol models, computes directed dependency graphs, performs graph-traversal blast-radius impact analysis, and provides evidence-grounded codebase chat with file-level and line-level citations.
+2. **Any-to-Any Migration Pipeline**: Synthesizes architecture plans, generates production-ready target codebases across leading enterprise stacks (Java 21 / Spring Boot 3.2, Python / FastAPI, Go / Gin, TypeScript / NestJS), renders live side-by-side diffs with semantic explainability, streams multi-agent activity over WebSockets, and enforces contract parity through behavioral verification and autonomous self-repair.
 
-**Privacy-First & Self-Contained**: ReForge requires **no mandatory external API keys** or proprietary third-party cloud services. It runs completely on your local machine or air-gapped infrastructure.
+ReForge is self-contained. It requires no mandatory external API keys or proprietary third-party cloud services, running completely on your local machine or air-gapped infrastructure.
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
-ReForge connects code analysis, graph theory, multi-agent orchestration, and code generation into a unified 9-stage pipeline:
+ReForge connects code analysis, graph theory, multi-agent orchestration, and code generation into a unified 7-stage pipeline:
 
 ```
 [ Uploaded Repository / ZIP / Live Codebase ]
@@ -100,11 +78,11 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 
 ---
 
-## ⚡ Core Capabilities & Modules
+## Core Capabilities & Modules
 
 ### 1. Ingestion & Multi-Stack Codebase Scanner
-- Ingest any project instantly via `.zip` upload, existing local folder path, or 1-Click Golden Demo.
-- Supports heterogeneous repositories across **Python, JavaScript, TypeScript, Go, and Java**.
+- Ingest any project via ZIP upload, local folder path, or 1-Click Demo.
+- Supports heterogeneous repositories across Python, JavaScript, TypeScript, Go, and Java.
 - Computes comprehensive inventory metrics: Total Files, Lines of Code (LOC), Discovered API Endpoints, Domain Services, Database Models, and Test Suites.
 
 ### 2. Interactive Architecture Graph Explorer
@@ -114,7 +92,7 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 
 ### 3. Deep Code Explorer
 - Tree browser showing full directory hierarchies.
-- Embedded high-performance **Monaco Code Editor** with syntax highlighting for all major languages.
+- Embedded Monaco Code Editor with syntax highlighting for all major languages.
 - Real-time symbol detection displaying classes, methods, endpoints, and callers per file.
 
 ### 4. Grounded Codebase Chat (RAG Engine)
@@ -133,13 +111,13 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 
 ### 6. Universal Migration Workspace
 - Configure target architectures: select Target Language, Framework, Database, and Testing Framework.
-- Generates a **Source-to-Target Mapping Matrix** mapping each original source file to its target artifact.
+- Generates a Source-to-Target Mapping Matrix mapping each original source file to its target artifact.
 - Categorizes transformation risks across Authentication, Schema Relational Mapping, Third-Party Integrations, and Validation.
 
 ### 7. Side-by-Side Monaco Diff Viewer
 - Side-by-side split editor displaying the genuine source file on the left and the generated target file on the right.
 - Language syntax highlighting dynamically adapts to the exact file types (e.g., Python on the left, Java on the right).
-- Provides semantic transformation explanations describing how language-specific paradigms (e.g., FastAPI decorators &rarr; Spring Boot `@RestController` annotations) were mapped.
+- Provides semantic transformation explanations describing how language-specific paradigms (e.g., FastAPI decorators -> Spring Boot `@RestController` annotations) were mapped.
 - Clickable mapping table rows allow instant inspection of any mapped artifact.
 
 ### 8. Real-Time Multi-Agent Streaming Console
@@ -157,23 +135,23 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 - Autonomous Self-Repair Loop detects contract deviations (e.g., missing status fields, timestamp formatting), applies AST patches, and re-runs the suite to achieve 100% parity.
 
 ### 10. Executive Audit Reports & One-Click ZIP Export
-- Generates an executive-ready architectural modernization audit report.
-- One-click `.zip` export packaging the entire generated target project ready for build and deployment.
+- Generates an architectural modernization audit report.
+- One-click ZIP export packaging the entire generated target project ready for build and deployment.
 
 ---
 
-##  Supported Migration Matrix
+## Supported Migration Matrix
 
 | Source Stack | Supported Target Stacks | Transformation Highlights |
 |---|---|---|
-| **Python**<br>*(FastAPI / Flask / SQLAlchemy)* | • **Java 21 / Spring Boot 3.2**<br>• **Go / Gin**<br>• **TypeScript / NestJS**<br>• **C# / ASP.NET Core 8** | FastAPI decorators &rarr; `@RestController`, SQLAlchemy models &rarr; JPA `@Entity` & `JpaRepository`, Pydantic schemas &rarr; Java DTOs, pytest &rarr; JUnit 5 + Mockito |
-| **Node.js**<br>*(Express / MongoDB / Mongoose)* | • **Java 21 / Spring Boot 3.2**<br>• **Python / FastAPI**<br>• **Go / Gin**<br>• **TypeScript / NestJS** | Express route handlers &rarr; Spring/FastAPI controllers, Mongoose schemas &rarr; Relational JPA/SQLAlchemy entities, Jest &rarr; JUnit 5 / pytest |
-| **Go**<br>*(Gin / Chi / GORM)* | • **Java 21 / Spring Boot 3.2**<br>• **Python / FastAPI**<br>• **TypeScript / NestJS** | Gin Context handlers &rarr; Typed controller actions, GORM structs &rarr; JPA entities, Go testing &rarr; JUnit 5 |
-| **Java**<br>*(Spring Boot / Jakarta EE)* | • **Python / FastAPI**<br>• **Go / Gin**<br>• **TypeScript / NestJS** | `@RestController` &rarr; FastAPI `APIRouter` / Gin handlers, JPA `@Entity` &rarr; Pydantic + SQLAlchemy models |
+| **Python**<br>*(FastAPI / Flask / SQLAlchemy)* | • Java 21 / Spring Boot 3.2<br>• Go / Gin<br>• TypeScript / NestJS<br>• C# / ASP.NET Core 8 | FastAPI decorators -> `@RestController`, SQLAlchemy models -> JPA `@Entity` & `JpaRepository`, Pydantic schemas -> Java DTOs, pytest -> JUnit 5 + Mockito |
+| **Node.js**<br>*(Express / MongoDB / Mongoose)* | • Java 21 / Spring Boot 3.2<br>• Python / FastAPI<br>• Go / Gin<br>• TypeScript / NestJS | Express route handlers -> Spring/FastAPI controllers, Mongoose schemas -> Relational JPA/SQLAlchemy entities, Jest -> JUnit 5 / pytest |
+| **Go**<br>*(Gin / Chi / GORM)* | • Java 21 / Spring Boot 3.2<br>• Python / FastAPI<br>• TypeScript / NestJS | Gin Context handlers -> Typed controller actions, GORM structs -> JPA entities, Go testing -> JUnit 5 |
+| **Java**<br>*(Spring Boot / Jakarta EE)* | • Python / FastAPI<br>• Go / Gin<br>• TypeScript / NestJS | `@RestController` -> FastAPI `APIRouter` / Gin handlers, JPA `@Entity` -> Pydantic + SQLAlchemy models |
 
 ---
 
-## 💻 Requirements & Prerequisites
+## Requirements & Prerequisites
 
 Ensure the following tools are installed on your host machine:
 
@@ -185,11 +163,11 @@ Ensure the following tools are installed on your host machine:
 | **Git** | 2.30+ | Latest | Version control & repository tracking |
 | **Operating System** | Windows 10/11, macOS 12+, or Linux (Ubuntu 20.04+) | Cross-platform compatibility |
 
-> **Note on LLMs**: ReForge is completely self-contained. It operates with a deterministic fallback engine by default (`DEMO_MODE=true`), so **no external API keys or paid subscriptions are required**. If you wish to enable local generative LLM inference, you can optionally connect a local [Ollama](https://ollama.ai) instance (`codellama` or `llama3`).
+> **Note on LLMs**: ReForge is completely self-contained. It operates with a deterministic fallback engine by default (`DEMO_MODE=true`), so no external API keys or paid subscriptions are required. If you wish to enable local generative LLM inference, you can optionally connect a local [Ollama](https://ollama.ai) instance (`codellama` or `llama3`).
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### Step 1: Clone the Repository
 ```bash
@@ -243,9 +221,9 @@ npm run build
 ```
 
 ### Step 5: Launch ReForge
-You can start the full-stack server using the provided one-click launch script or directly via Uvicorn:
+You can start the full-stack server using the provided launch script or directly via Uvicorn:
 
-**Option A — Windows One-Click Script (from repository root):**
+**Option A — Windows Launch Script (from repository root):**
 ```powershell
 .\run.ps1
 ```
@@ -257,7 +235,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 Open your browser to:
-👉 **`http://localhost:8000`**
+**`http://localhost:8000`**
 
 *(Optional)* If you wish to run the Vite hot-reloading development server alongside the backend:
 ```bash
@@ -268,9 +246,9 @@ Navigate to `http://localhost:5173` (API requests are automatically proxied to p
 
 ---
 
-## 🧪 Running Automated Tests
+## Running Automated Tests
 
-ReForge includes a comprehensive automated test suite verifying repository scanning, AST symbol parsing, NetworkX graph modeling, RAG chat citation accuracy, dynamic migration code generation, and behavioral verification.
+ReForge includes an automated test suite verifying repository scanning, AST symbol parsing, NetworkX graph modeling, RAG chat citation accuracy, dynamic migration code generation, and behavioral verification.
 
 To run the full test suite:
 
@@ -299,7 +277,7 @@ tests/test_reforge.py::test_full_pipeline PASSED                         [100%]
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ReForge/
@@ -356,13 +334,13 @@ ReForge/
 ├── sample-project/                 # Built-in sample legacy application for testing
 ├── .env.example                    # Sample environment configuration template
 ├── .gitignore                      # Git exclusion rules
-├── run.ps1                         # 1-Click launch script for Windows
+├── run.ps1                         # Launch script for Windows
 └── README.md                       # Platform documentation
 ```
 
 ---
 
-## ⚙️ Configuration Reference
+## Configuration Reference
 
 ReForge is configured using environment variables defined in `.env`:
 
@@ -379,7 +357,7 @@ ReForge is configured using environment variables defined in `.env`:
 
 ---
 
-## 🛡 Security & Privacy
+## Security & Privacy
 
 - **100% Local Execution**: All scanning, AST parsing, graph calculations, code generation, and verification execute locally on your machine.
 - **Zero Data Leakage**: Source code, architectural graphs, and generated code are never transmitted to external third-party servers.
@@ -387,12 +365,6 @@ ReForge is configured using environment variables defined in `.env`:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE) — free for personal, educational, and commercial usage.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ for software engineers modernizing legacy codebases everywhere.</sub>
-</div>
