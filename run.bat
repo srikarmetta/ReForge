@@ -1,74 +1,83 @@
 @echo off
 setlocal enabledelayedexpansion
 
+title ReForge - Codebase Intelligence ^& Software Migration
+
 echo ======================================================
 echo    ReForge: Codebase Intelligence ^& Migration Platform
 echo ======================================================
 echo.
 
-set "ROOT_DIR=%~dp0"
-set "BACKEND_DIR=%ROOT_DIR%backend"
-set "VENV_DIR=%BACKEND_DIR%\.venv"
-set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
+cd /d "%~dp0"
 
-:: 1. Check or create virtualenv
-if not exist "%VENV_PYTHON%" (
+:: 1. Detect existing virtualenv in root or backend
+set "VENV_PYTHON="
+if exist ".venv\Scripts\python.exe" set "VENV_PYTHON=.venv\Scripts\python.exe"
+if not defined VENV_PYTHON (
+    if exist "backend\.venv\Scripts\python.exe" set "VENV_PYTHON=backend\.venv\Scripts\python.exe"
+)
+
+:: 2. If no virtualenv found, find system Python and create one
+if not defined VENV_PYTHON (
     echo [1/3] Setting up Python virtual environment...
-    cd /d "%BACKEND_DIR%"
     
-    where py >nul 2>&1
-    if %errorlevel% equ 0 (
-        py -3 -m venv .venv
-    ) else (
-        where python >nul 2>&1
-        if %errorlevel% equ 0 (
-            python -m venv .venv
-        ) else (
-            echo ERROR: Python 3.10+ is required but not found in PATH.
-            echo Please install Python from https://www.python.org/downloads/
-            pause
-            exit /b 1
-        )
+    set "SYS_PYTHON="
+    python --version >nul 2>&1 && set "SYS_PYTHON=python"
+    if not defined SYS_PYTHON (
+        py -3 --version >nul 2>&1 && set "SYS_PYTHON=py -3"
+    )
+    if not defined SYS_PYTHON (
+        python3 --version >nul 2>&1 && set "SYS_PYTHON=python3"
     )
 
-    if not exist "%VENV_PYTHON%" (
-        echo ERROR: Failed to create virtual environment.
+    if not defined SYS_PYTHON (
+        echo.
+        echo [ERROR] Python 3.10+ was not found on your system!
+        echo Please install Python from https://www.python.org/downloads/
+        echo IMPORTANT: When installing, check the box: "Add Python to PATH"
+        echo.
         pause
         exit /b 1
     )
 
-    echo Installing backend dependencies...
-    "%VENV_PYTHON%" -m pip install --quiet --upgrade pip
-    "%VENV_PYTHON%" -m pip install --quiet -r requirements.txt
-    echo Backend dependencies installed successfully.
+    echo Using system Python: !SYS_PYTHON!
+    !SYS_PYTHON! -m venv .venv
+    if not exist ".venv\Scripts\python.exe" (
+        echo [ERROR] Failed to create virtual environment in .venv
+        pause
+        exit /b 1
+    )
+    set "VENV_PYTHON=.venv\Scripts\python.exe"
+
+    echo Installing dependencies from requirements.txt...
+    !VENV_PYTHON! -m pip install --upgrade pip --quiet
+    !VENV_PYTHON! -m pip install -r requirements.txt --quiet
+    echo Dependencies installed successfully.
 ) else (
-    echo [1/3] Python virtual environment detected.
+    echo [1/3] Python environment ready: !VENV_PYTHON!
 )
 
-:: 2. Check frontend
-set "DIST_INDEX=%ROOT_DIR%frontend\dist\index.html"
-if not exist "%DIST_INDEX%" (
-    echo [2/3] Building frontend assets...
-    where npm >nul 2>&1
-    if %errorlevel% equ 0 (
-        cd /d "%ROOT_DIR%frontend"
+:: 3. Check pre-compiled frontend assets
+if exist "frontend\dist\index.html" (
+    echo [2/3] Pre-compiled frontend UI ready.
+) else (
+    echo [2/3] Pre-compiled frontend not found, checking Node.js...
+    npm --version >nul 2>&1 && (
+        cd frontend
         call npm install --silent
         call npm run build
-    ) else (
-        echo WARNING: Pre-compiled frontend not found and npm is not installed.
+        cd ..
+    ) || (
+        echo WARNING: Frontend build not found and npm is not installed.
     )
-) else (
-    echo [2/3] Pre-compiled frontend UI ready.
 )
 
-:: 3. Launch
-echo [3/3] Starting ReForge server on http://localhost:8000...
+:: 4. Launch ReForge server
+echo [3/3] Starting ReForge full-stack server on http://localhost:8000...
 echo.
 echo ^>^> Web UI: http://127.0.0.1:8000
-echo ^>^> Press Ctrl+C to stop the server.
+echo ^>^> Press Ctrl+C in this window to stop the server.
 echo.
 
-start http://localhost:8000
-cd /d "%BACKEND_DIR%"
-"%VENV_PYTHON%" -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+!VENV_PYTHON! main.py
 pause

@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     DEMO_MODE: bool = True
 
     class Config:
-        env_file = ".env"
+        env_file = (os.path.join(BASE_REFORGE_DIR, ".env"), ".env")
+        extra = "ignore"
 
 settings = Settings()

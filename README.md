@@ -166,19 +166,18 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 
 ## Quick Start Guide
 
-You can run ReForge using either the automated 1-Click Launchers (recommended for all users) or manual terminal commands.
+You can run ReForge using either automated 1-click launchers or standard terminal commands.
 
-### Method 1: 1-Click Zero-Configuration Launch (Recommended)
+### Option 1: 1-Click Zero-Configuration Launchers (Recommended)
 
 The repository includes self-bootstrapping scripts that automatically detect Python, create a virtual environment, install backend dependencies, and launch the web interface in your default browser.
 
 #### On Windows:
-- **Option 1**: Double-click `run.bat` in the repository root folder.
-- **Option 2** (PowerShell):
+- **Best / Fastest**: Simply **double-click `run.bat`** in the repository root folder. (Runs in standard Command Prompt — completely immune to PowerShell script execution policy restrictions).
+- **Via PowerShell**:
   ```powershell
-  .\run.ps1
+  powershell -ExecutionPolicy Bypass -File .\run.ps1
   ```
-  *(If PowerShell displays a script execution policy restriction, run `powershell -ExecutionPolicy Bypass -File .\run.ps1`)*
 
 #### On macOS / Linux:
 ```bash
@@ -186,90 +185,85 @@ chmod +x run.sh
 ./run.sh
 ```
 
-Once launched, the browser opens automatically to:
+Once launched, your browser opens automatically to:
 **`http://localhost:8000`**
 
 ---
 
-### Method 2: Manual Developer Setup
+### Option 2: Standard Python Startup (From Project Root)
 
-If you want to run the backend and frontend development servers separately with hot module reloading:
+If you prefer running manual commands in your terminal, you can start the platform directly from the repository root:
 
-#### Step 1: Clone or Extract the Repository
 ```bash
-git clone https://github.com/srikarmetta/ReForge.git
-cd ReForge
-```
-
-#### Step 2: Configure Environment Variables
-```bash
-# On Linux / macOS
-cp .env.example .env
-
-# On Windows (PowerShell)
-Copy-Item .env.example .env
-```
-*(The default `.env` file works out-of-the-box with zero edits required.)*
-
-#### Step 3: Start the Backend Server (Terminal 1)
-```bash
-# Navigate to backend
-cd backend
-
-# Create and activate virtual environment
-python -m venv .venv
-
-# On Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
-# On Linux / macOS:
-source .venv/bin/activate
-
-# Install backend dependencies
+# 1. Install backend dependencies
 pip install -r requirements.txt
 
-# Start FastAPI backend on port 8000
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+# 2. Start the full-stack platform
+python main.py
 ```
 
-#### Step 4: Start the Frontend Development Server (Terminal 2)
+Open your browser to:
+**`http://localhost:8000`**
+
+---
+
+### Option 3: Full Developer Mode (Frontend Hot-Reloading)
+
+If you are actively developing and modifying the React frontend components with live hot-reloading:
+
+#### Terminal 1 — Backend:
 ```bash
-# From the repository root:
+# Start backend server from repository root
+python main.py
+```
+
+#### Terminal 2 — Frontend:
+```bash
+# Navigate to frontend and start Vite development server
 cd frontend
-
-# Install Node dependencies
 npm install
-
-# Start the Vite development server
 npm run dev
 ```
 
 Open your browser to:
-**`http://localhost:5173`** (Vite automatically proxies API requests to `http://127.0.0.1:8000`).
+**`http://localhost:5173`** (Vite automatically proxies all API requests to `http://127.0.0.1:8000`).
 
 ---
 
 ## Troubleshooting & FAQs
 
-### 1. The home page loads, but clicking "1-Click Demo" or "Upload Project" shows an offline warning or does nothing.
-- **Cause**: The React web interface cannot connect to the FastAPI backend server.
+### 1. "Cannot move beyond home page" / "Backend server unreachable"
+- **Cause**: The frontend UI is running, but the backend server at `http://127.0.0.1:8000` is not running or is blocked.
 - **Solution**:
-  1. Verify that the backend server is running in a terminal without errors.
-  2. Test backend responsiveness by opening `http://127.0.0.1:8000/api/health` in your browser. It should return `{"status":"healthy"}`.
-  3. If you used `npm run dev`, make sure your backend is running on `127.0.0.1:8000`. The Vite proxy targets `http://127.0.0.1:8000` directly.
-  4. Ensure a local firewall or antivirus is not blocking port 8000.
+  1. Open `http://127.0.0.1:8000/api/health` in your browser. It should return `{"status":"healthy"}`.
+  2. If running manually, ensure `python main.py` is actively running in a terminal without errors.
+  3. Ensure a local firewall or antivirus software is not blocking incoming connections on port 8000.
 
-### 2. PowerShell displays "running scripts is disabled on this system".
-- **Cause**: Windows PowerShell default execution policy restricts unsigned `.ps1` scripts.
-- **Solution**: Run the script with execution policy bypass:
-  ```powershell
-  powershell -ExecutionPolicy Bypass -File .\run.ps1
-  ```
-  Or simply double-click `run.bat`, which runs in Windows Command Prompt without PowerShell restrictions.
+### 2. PowerShell displays: "File cannot be loaded because running scripts is disabled on this system"
+- **Cause**: Windows PowerShell default security policy restricts execution of `.ps1` scripts.
+- **Solution**:
+  - **Quickest Fix**: Double-click `run.bat` instead. It runs in standard Windows Command Prompt without PowerShell restrictions.
+  - Or run with explicit bypass:
+    ```powershell
+    powershell -ExecutionPolicy Bypass -File .\run.ps1
+    ```
 
-### 3. Port 8000 is already in use.
-- **Solution**: Terminate any lingering process on port 8000 or launch on an alternate port:
+### 3. "ModuleNotFoundError: No module named 'app'"
+- **Cause**: Attempting to run `uvicorn app.main:app` from the root directory rather than `backend/`.
+- **Solution**: Simply run `python main.py` from the root directory. It automatically configures Python module search paths so all modules are discoverable regardless of your terminal directory.
+
+### 4. pip install fails with "Microsoft Visual C++ 14.0 or greater is required"
+- **Cause**: Older pinned packages (like `httptools` or `watchfiles`) sometimes require a C++ compiler on Windows with newer Python versions (3.12+).
+- **Solution**: The repository's `requirements.txt` is pre-configured with modern, universal wheels that install cleanly on Python 3.10, 3.11, 3.12, and 3.13 without requiring any C++ build tools.
+
+### 5. Port 8000 is already in use
+- **Solution**: If another process is using port 8000, specify a custom port:
   ```bash
-  python -m uvicorn app.main:app --host 127.0.0.1 --port 8080
+  PORT=8080 python main.py
+  ```
+  Or in Windows PowerShell:
+  ```powershell
+  $env:PORT=8080; python main.py
   ```
 
 ---

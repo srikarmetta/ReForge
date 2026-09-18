@@ -16,3 +16,4 @@ test_out_migration/
 
 *.log
 .DS_Store
+figma_assets/

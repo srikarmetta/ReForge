@@ -7,16 +7,17 @@ echo "======================================================"
 echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKEND_DIR="$SCRIPT_DIR/backend"
-FRONTEND_DIR="$SCRIPT_DIR/frontend"
-VENV_DIR="$BACKEND_DIR/.venv"
-VENV_PYTHON="$VENV_DIR/bin/python"
+cd "$SCRIPT_DIR"
 
-# 1. Setup Virtual Environment
-if [ ! -f "$VENV_PYTHON" ]; then
+VENV_PYTHON=""
+if [ -f "$SCRIPT_DIR/.venv/bin/python" ]; then
+    VENV_PYTHON="$SCRIPT_DIR/.venv/bin/python"
+elif [ -f "$SCRIPT_DIR/backend/.venv/bin/python" ]; then
+    VENV_PYTHON="$SCRIPT_DIR/backend/.venv/bin/python"
+fi
+
+if [ -z "$VENV_PYTHON" ]; then
     echo "[1/3] Setting up Python virtual environment..."
-    cd "$BACKEND_DIR"
-    
     if command -v python3 &>/dev/null; then
         python3 -m venv .venv
     elif command -v python &>/dev/null; then
@@ -25,42 +26,29 @@ if [ ! -f "$VENV_PYTHON" ]; then
         echo "ERROR: Python 3.10+ is required but not found."
         exit 1
     fi
-
-    echo "Installing backend dependencies..."
+    VENV_PYTHON="$SCRIPT_DIR/.venv/bin/python"
     "$VENV_PYTHON" -m pip install --quiet --upgrade pip
     "$VENV_PYTHON" -m pip install --quiet -r requirements.txt
-    echo "Backend dependencies installed successfully."
 else
     echo "[1/3] Python virtual environment detected."
 fi
 
-# 2. Check frontend build
-if [ ! -f "$FRONTEND_DIR/dist/index.html" ]; then
+if [ ! -f "$SCRIPT_DIR/frontend/dist/index.html" ]; then
     echo "[2/3] Building frontend assets..."
     if command -v npm &>/dev/null; then
-        cd "$FRONTEND_DIR"
+        cd "$SCRIPT_DIR/frontend"
         npm install --silent
         npm run build
-    else
-        echo "WARNING: Pre-compiled frontend not found and npm is not installed."
+        cd "$SCRIPT_DIR"
     fi
 else
     echo "[2/3] Pre-compiled frontend UI ready."
 fi
 
-# 3. Launch
 echo "[3/3] Starting ReForge server on http://localhost:8000..."
 echo ""
 echo ">> Web UI: http://127.0.0.1:8000"
 echo ">> Press Ctrl+C to stop the server."
 echo ""
 
-# Attempt to open browser across platforms
-if command -v xdg-open &>/dev/null; then
-    xdg-open "http://localhost:8000" &
-elif command -v open &>/dev/null; then
-    open "http://localhost:8000" &
-fi
-
-cd "$BACKEND_DIR"
-"$VENV_PYTHON" -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+"$VENV_PYTHON" main.py
