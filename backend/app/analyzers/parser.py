@@ -134,7 +134,7 @@ def parse_codebase_symbols(repo_path: str) -> Dict[str, Any]:
                     })
 
             # --- 2. CONTROLLER / HANDLER EXTRACTION ---
-            if is_controller or (ext == '.py' and (is_route or 'def ' in content)):
+            if not is_test and (is_controller or is_route or (ext == '.py' and 'def ' in content)):
                 ctrl_id = f"ctrl_{file_base}"
                 # Extract Python functions or JS/TS functions
                 if ext == '.py':
@@ -163,7 +163,7 @@ def parse_codebase_symbols(repo_path: str) -> Dict[str, Any]:
                         })
 
             # --- 3. SERVICE / BUSINESS LOGIC EXTRACTION ---
-            if is_service:
+            if not is_test and is_service:
                 svc_id = f"svc_{file_base}"
                 if ext == '.py':
                     fn_matches = re.findall(r'(?:async\s+)?def\s+([A-Za-z0-9_]+)\s*\(', content)
@@ -179,6 +179,17 @@ def parse_codebase_symbols(repo_path: str) -> Dict[str, Any]:
                     "methods": methods[:8]
                 })
 
+                # Check Inter-Service calls (e.g. orderService calling paymentService, emailService)
+                inter_svc_refs = re.findall(r'([A-Za-z0-9_]*[sS]ervice|[A-Za-z0-9_]*[cC]rud)\.([A-Za-z0-9_]+)', content)
+                for target_svc, m_called in set(inter_svc_refs):
+                    if target_svc.lower() != file_base.lower():
+                        results["relationships"].append({
+                            "source": svc_id,
+                            "target": f"svc_{target_svc}",
+                            "type": "calls",
+                            "label": f"calls {m_called}()"
+                        })
+
                 # Check DB / Model references
                 model_refs = re.findall(r'([A-Z][A-Za-z0-9_]+)\.(query|find|create|filter|save|get|delete|add)', content)
                 for model_name, m_called in set(model_refs):
@@ -190,7 +201,7 @@ def parse_codebase_symbols(repo_path: str) -> Dict[str, Any]:
                     })
 
             # --- 4. MODEL / SCHEMA EXTRACTION ---
-            if is_model or (ext == '.py' and ('Base' in content or 'BaseModel' in content or 'models.Model' in content)):
+            if not is_test and (is_model or (ext == '.py' and ('Base' in content or 'BaseModel' in content or 'models.Model' in content))):
                 model_id = f"model_{file_base.lower()}"
                 field_list = []
 
@@ -244,6 +255,18 @@ def parse_codebase_symbols(repo_path: str) -> Dict[str, Any]:
                     "file": rel_path,
                     "cases": cases[:8]
                 })
+
+                # Test target references
+                tested_refs = re.findall(r'([A-Za-z0-9_]*[sS]ervice|[A-Za-z0-9_]*[cC]ontroller)', content)
+                for t_ref in set(tested_refs):
+                    pfx = "svc_" if "service" in t_ref.lower() else "ctrl_"
+                    results["relationships"].append({
+                        "source": test_id,
+                        "target": f"{pfx}{t_ref}",
+                        "type": "tests",
+                        "label": "tests"
+                    })
+
 
     # If no explicit models found, synthesize top-level entities if files exist
     if not results["models"]:

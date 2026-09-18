@@ -72,6 +72,11 @@ export const getFileContent = async (id: string, path: string) => {
 };
 
 // Codebase Chat
+export const getChatInitialContext = async (id: string) => {
+  const res = await api.get(`/projects/${id}/chat/initial`);
+  return res.data;
+};
+
 export const askCodebaseChat = async (id: string, message: string) => {
   const res = await api.post(`/projects/${id}/chat`, { message });
   return res.data;

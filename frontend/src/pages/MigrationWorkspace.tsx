@@ -29,7 +29,7 @@ const MigrationWorkspace: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'plan' | 'diff' | 'console'>('plan');
   
   // Diff viewer state
-  const [diffComponent, setDiffComponent] = useState('order');
+  const [diffComponent, setDiffComponent] = useState('');
   const [diffData, setDiffData] = useState<any | null>(null);
 
   const logsEndRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,6 @@ const MigrationWorkspace: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     loadPlan();
-    loadDiff(diffComponent);
 
     // WebSocket connection for real-time agent console streaming
     const wsUrl = `ws://${window.location.host}/ws/projects/${id}`;
@@ -51,7 +50,10 @@ const MigrationWorkspace: React.FC = () => {
           setLogs((prev) => [...prev, data.message]);
         } else if (data.type === 'status') {
           if (data.message === 'RUNNING') setStatus('RUNNING');
-          if (data.message === 'COMPLETE') setStatus('COMPLETE');
+          if (data.message === 'COMPLETE') {
+            setStatus('COMPLETE');
+            if (diffComponent) loadDiff(diffComponent);
+          }
         } else if (data.type === 'agent_event') {
           setLogs((prev) => [...prev, `[${data.agent.toUpperCase()}] ${data.message}`]);
         }
@@ -75,8 +77,16 @@ const MigrationWorkspace: React.FC = () => {
     try {
       const res = await getMigrationPlan(id!);
       setPlan(res);
+      if (res?.mappings && res.mappings.length > 0) {
+        const firstComp = res.mappings[0].source || res.mappings[0].target;
+        setDiffComponent((prev) => prev || firstComp);
+        loadDiff(firstComp);
+      } else {
+        loadDiff('');
+      }
     } catch (err) {
       console.error(err);
+      loadDiff('');
     }
   };
 
@@ -99,6 +109,11 @@ const MigrationWorkspace: React.FC = () => {
         testing: targetTesting
       });
       setPlan(p);
+      if (p?.mappings && p.mappings.length > 0) {
+        const firstComp = p.mappings[0].source || p.mappings[0].target;
+        setDiffComponent(firstComp);
+        loadDiff(firstComp);
+      }
       setActiveTab('plan');
     } catch (err) {
       console.error(err);
@@ -141,7 +156,12 @@ const MigrationWorkspace: React.FC = () => {
             <h1 className="text-xl font-bold tracking-tight text-white">Universal Migration Workspace</h1>
           </div>
           <p className="text-xs text-zinc-400">
-            Node.js / Express / MongoDB <span className="text-zinc-600 mx-1.5">&rarr;</span> 
+            {plan?.source_stack ? (
+              <span>{plan.source_stack.language} {plan.source_stack.framework ? `/ ${plan.source_stack.framework}` : ''}</span>
+            ) : (
+              <span>Source Project</span>
+            )}
+            <span className="text-zinc-600 mx-1.5">&rarr;</span> 
             <span className="text-emerald-400 font-semibold">{targetLang} / {targetFramework} / {targetDb}</span>
           </p>
         </div>
@@ -277,11 +297,17 @@ const MigrationWorkspace: React.FC = () => {
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
-          Migration Plan & Mappings ({plan?.mappings?.length || 8})
+          Migration Plan & Mappings ({plan?.mappings?.length || 0})
         </button>
 
         <button
-          onClick={() => setActiveTab('diff')}
+          onClick={() => {
+            setActiveTab('diff');
+            if (!diffData) {
+              const comp = diffComponent || (plan?.mappings && plan.mappings[0]?.source) || '';
+              loadDiff(comp);
+            }
+          }}
           className={`px-4 py-2 border-b-2 font-medium transition-colors ${
             activeTab === 'diff' 
               ? 'border-emerald-500 text-emerald-400' 
@@ -373,8 +399,16 @@ const MigrationWorkspace: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-zinc-800/80 text-zinc-300 font-mono">
                   {plan.mappings?.map((m, i) => (
-                    <tr key={i} className="hover:bg-zinc-900/60 transition-colors">
-                      <td className="px-5 py-3 text-amber-400">{m.source}</td>
+                    <tr 
+                      key={i} 
+                      onClick={() => {
+                        handleDiffCompChange(m.source || m.target);
+                        setActiveTab('diff');
+                      }}
+                      className="hover:bg-zinc-900/60 cursor-pointer transition-colors"
+                      title="Click to inspect in Diff Viewer"
+                    >
+                      <td className="px-5 py-3 text-amber-400 hover:underline">{m.source}</td>
                       <td className="px-5 py-3 text-emerald-400">{m.target}</td>
                       <td className="px-5 py-3 text-zinc-400 font-sans text-xs">{m.description}</td>
                       <td className="px-5 py-3">
@@ -393,74 +427,102 @@ const MigrationWorkspace: React.FC = () => {
         )}
 
         {/* 2. SIDE-BY-SIDE DIFF TAB */}
-        {activeTab === 'diff' && diffData && (
+        {activeTab === 'diff' && (
           <div className="flex flex-col h-full space-y-4 pb-4">
             {/* Component Picker & Semantic explanation */}
             <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shrink-0">
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-mono text-zinc-400">Inspecting Component:</span>
-                <button
-                  onClick={() => handleDiffCompChange('order')}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono ${
-                    diffComponent === 'order' ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-zinc-400'
-                  }`}
-                >
-                  OrderController
-                </button>
-                <button
-                  onClick={() => handleDiffCompChange('user')}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono ${
-                    diffComponent === 'user' ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-zinc-400'
-                  }`}
-                >
-                  UserController
-                </button>
+              <div className="flex items-center gap-2 flex-wrap max-w-2xl">
+                <span className="text-xs font-mono text-zinc-400 mr-1">Component:</span>
+                {plan?.mappings && plan.mappings.length > 0 ? (
+                  plan.mappings.map((m: any, idx: number) => {
+                    const compKey = m.source || m.target;
+                    const label = m.source ? m.source.split('/').pop() : (m.target ? m.target.split('/').pop() : `Comp ${idx + 1}`);
+                    const isSelected = diffComponent === m.source || diffComponent === m.target || diffData?.source_path === m.source;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleDiffCompChange(compKey)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-colors flex items-center gap-1.5 ${
+                          isSelected 
+                            ? 'bg-emerald-600 text-white font-semibold shadow-sm' 
+                            : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300'
+                        }`}
+                        title={`${m.source} → ${m.target}`}
+                      >
+                        <FileCode className="w-3 h-3 text-emerald-300" />
+                        <span>{label}</span>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <span className="text-xs font-mono text-zinc-500">
+                    {diffData?.component || 'Analyzing...'}
+                  </span>
+                )}
               </div>
 
-              <div className="text-xs text-zinc-300 bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 flex-1 max-w-xl">
-                <span className="text-emerald-400 font-mono font-semibold mr-1.5">Semantic Mapping:</span>
-                {diffData.semantic_explanation}
-              </div>
+              {diffData?.semantic_explanation && (
+                <div className="text-xs text-zinc-300 bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 flex-1 max-w-xl">
+                  <span className="text-emerald-400 font-mono font-semibold mr-1.5">Semantic Mapping:</span>
+                  {diffData.semantic_explanation}
+                </div>
+              )}
             </div>
 
             {/* Split Code View */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 min-h-[400px]">
-              {/* Left: Source */}
-              <div className="rounded-xl border border-zinc-800 bg-[#1e1e1e] flex flex-col overflow-hidden">
-                <div className="p-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
-                  <span className="text-amber-400">SOURCE: {diffData.source_path}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300">JavaScript</span>
+            {diffData ? (
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 min-h-[400px]">
+                {/* Left: Source */}
+                <div className="rounded-xl border border-zinc-800 bg-[#1e1e1e] flex flex-col overflow-hidden">
+                  <div className="p-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+                    <span className="text-amber-400 truncate max-w-[70%]" title={diffData.source_path}>
+                      SOURCE: {diffData.source_path}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 uppercase font-semibold">
+                      {diffData.source_lang || 'Source'}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <Editor
+                      height="100%"
+                      language={diffData.source_lang}
+                      theme="vs-dark"
+                      value={diffData.source_code}
+                      options={{ readOnly: true, minimap: { enabled: false }, fontSize: 12 }}
+                    />
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <Editor
-                    height="100%"
-                    language={diffData.source_lang}
-                    theme="vs-dark"
-                    value={diffData.source_code}
-                    options={{ readOnly: true, minimap: { enabled: false }, fontSize: 12 }}
-                  />
-                </div>
-              </div>
 
-              {/* Right: Target */}
-              <div className="rounded-xl border border-zinc-800 bg-[#1e1e1e] flex flex-col overflow-hidden">
-                <div className="p-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
-                  <span className="text-emerald-400">TARGET: {diffData.target_path}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300">Java / Spring Boot</span>
-                </div>
-                <div className="flex-1">
-                  <Editor
-                    height="100%"
-                    language={diffData.target_lang}
-                    theme="vs-dark"
-                    value={diffData.target_code}
-                    options={{ readOnly: true, minimap: { enabled: false }, fontSize: 12 }}
-                  />
+                {/* Right: Target */}
+                <div className="rounded-xl border border-zinc-800 bg-[#1e1e1e] flex flex-col overflow-hidden">
+                  <div className="p-2.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+                    <span className="text-emerald-400 truncate max-w-[70%]" title={diffData.target_path}>
+                      TARGET: {diffData.target_path}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 uppercase font-semibold">
+                      {diffData.target_lang || 'Target'}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <Editor
+                      height="100%"
+                      language={diffData.target_lang}
+                      theme="vs-dark"
+                      value={diffData.target_code}
+                      options={{ readOnly: true, minimap: { enabled: false }, fontSize: 12 }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center border border-dashed border-zinc-800 rounded-xl text-zinc-500 text-xs">
+                <Loader2 className="w-4 h-4 mr-2 animate-spin text-emerald-500" />
+                Loading diff viewer...
+              </div>
+            )}
           </div>
         )}
+
 
         {/* 3. AGENT ACTIVITY CONSOLE TAB */}
         {activeTab === 'console' && (

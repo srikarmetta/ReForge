@@ -211,5 +211,6 @@ def create_migration_plan(
         "risks": risks,
         "confidence": 0.95,
         "total_files_mapped": len(mappings),
-        "files_affected": sorted(list(set(files_affected)))
+        "files_affected": sorted(list(set(files_affected))),
+        "parsed_data": parsed_data
     }

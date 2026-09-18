@@ -1,50 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getImpact, getAnalysis } from '../services/api';
+import { getImpact, getArchitecture, getAnalysis } from '../services/api';
 import type { ImpactResult } from '../types';
 import { 
   ShieldAlert, AlertTriangle, CheckCircle, ArrowRight, 
   Cpu, FileCode, Box, Shield, RefreshCw 
 } from 'lucide-react';
 
+interface ComponentItem {
+  id: string;
+  label: string;
+  type: string;
+}
+
 const ImpactAnalysis: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [components, setComponents] = useState<string[]>([
-    'PaymentService', 'OrderService', 'UserService', 'orderController', 'authController'
-  ]);
-  const [selectedComp, setSelectedComp] = useState<string>('PaymentService');
+  const [components, setComponents] = useState<ComponentItem[]>([]);
+  const [selectedComp, setSelectedComp] = useState<string>('');
   const [impact, setImpact] = useState<ImpactResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
       loadComponents();
-      runAnalysis(selectedComp);
     }
   }, [id]);
 
   const loadComponents = async () => {
     try {
-      const a = await getAnalysis(id!);
-      const list: string[] = [];
-      (a.services || []).forEach((s: any) => list.push(s.name));
-      (a.controllers || []).forEach((c: any) => list.push(c.name));
-      if (list.length > 0) {
-        setComponents(list);
-        if (!list.includes(selectedComp)) {
-          setSelectedComp(list[0]);
-          runAnalysis(list[0]);
+      setLoading(true);
+      const arch = await getArchitecture(id!);
+      const list: ComponentItem[] = [];
+      const seen = new Set<string>();
+
+      (arch.nodes || []).forEach((n: any) => {
+        const rawType = n.data?.rawType || n.type || 'component';
+        const label = n.data?.rawLabel || n.data?.label || n.id;
+        const compId = n.id;
+        if (!seen.has(compId) && compId !== 'db_main') {
+          seen.add(compId);
+          list.push({ id: compId, label, type: rawType });
         }
+      });
+
+      if (list.length === 0) {
+        const a = await getAnalysis(id!);
+        (a.controllers || []).forEach((c: any) => {
+          if (!seen.has(c.name)) { seen.add(c.name); list.push({ id: c.id || c.name, label: c.name, type: 'controller' }); }
+        });
+        (a.services || []).forEach((s: any) => {
+          if (!seen.has(s.name)) { seen.add(s.name); list.push({ id: s.id || s.name, label: s.name, type: 'service' }); }
+        });
+        (a.models_found || []).forEach((m: any) => {
+          if (!seen.has(m.name)) { seen.add(m.name); list.push({ id: m.id || m.name, label: m.name, type: 'model' }); }
+        });
+      }
+
+      setComponents(list);
+      if (list.length > 0) {
+        setSelectedComp(list[0].id);
+        await runAnalysis(list[0].id);
+      } else {
+        setLoading(false);
       }
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   };
 
   const runAnalysis = async (comp: string) => {
-    if (!id) return;
+    if (!id || !comp) return;
     try {
       setLoading(true);
       const res = await getImpact(id, comp);
@@ -81,10 +109,12 @@ const ImpactAnalysis: React.FC = () => {
           <select
             value={selectedComp}
             onChange={(e) => handleSelectChange(e.target.value)}
-            className="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500"
+            className="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500 max-w-[260px] truncate"
           >
             {components.map((c) => (
-              <option key={c} value={c}>{c}</option>
+              <option key={c.id} value={c.id}>
+                [{c.type.toUpperCase()}] {c.label}
+              </option>
             ))}
           </select>
         </div>

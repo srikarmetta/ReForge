@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { startVerification, getVerificationResults } from '../services/api';
+import { startVerification, getVerificationResults, getProject } from '../services/api';
 import type { VerificationResponse, ScenarioResult } from '../types';
 import { 
   CheckCircle2, AlertTriangle, Play, RefreshCw, 
@@ -12,6 +12,7 @@ const Verification: React.FC = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState<VerificationResponse | null>(null);
+  const [project, setProject] = useState<any | null>(null);
   const [running, setRunning] = useState(false);
   const [autoRepair, setAutoRepair] = useState(true);
   const [selectedScenario, setSelectedScenario] = useState<ScenarioResult | null>(null);
@@ -19,6 +20,7 @@ const Verification: React.FC = () => {
   useEffect(() => {
     if (id) {
       loadResults();
+      getProject(id).then(setProject).catch(console.error);
     }
   }, [id]);
 
@@ -57,7 +59,7 @@ const Verification: React.FC = () => {
             <h1 className="text-2xl font-bold tracking-tight text-white">Behavioral Verification Center</h1>
           </div>
           <p className="text-xs text-zinc-400">
-            Replays behavioral scenarios against original Node.js endpoints and migrated Spring Boot target endpoints to prove 100% contract equivalence.
+            Replays behavioral scenarios against original {project?.source_stack || 'source'} contracts and migrated {project?.target_stack || 'target'} implementations to prove 100% contract equivalence.
           </p>
         </div>
 

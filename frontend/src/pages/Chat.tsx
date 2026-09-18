@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { askCodebaseChat, getChatHistory } from '../services/api';
+import { askCodebaseChat, getChatHistory, getChatInitialContext } from '../services/api';
 import type { ChatMessage } from '../types';
 import { 
   Send, Sparkles, BookOpen, ShieldCheck, HelpCircle, 
@@ -15,21 +15,49 @@ const Chat: React.FC = () => {
     {
       sender: 'agent',
       data: {
-        summary: "I'm the ReForge Codebase Intelligence agent. I have ingested the repository into a deterministic knowledge layer. Ask me anything about the system's architecture, business rules, or migration considerations.",
-        evidence: [
-          { text: "Repository analyzed: Express.js 3-tier REST API with MongoDB/Mongoose models, JWT middleware, and Jest tests.", file: "server.js", lines: "L1-L40" }
-        ],
-        analysis: [
-          { text: "Call graph established from routes -> controllers -> services -> repositories/models." }
-        ],
-        hypothesis: [
-          { text: "Ready to map cleanly to Spring Boot / PostgreSQL or Python / FastAPI." }
-        ]
+        summary: "Analyzing codebase repository and indexing deterministic knowledge layer...",
+        evidence: [],
+        analysis: [],
+        hypothesis: []
       }
     }
   ]);
+  const [sampleQuestions, setSampleQuestions] = useState<string[]>([
+    "What is the overarching architecture of this codebase?",
+    "Which components and services form the primary workflow?",
+    "What data schemas and models are defined?",
+    "What are the key migration considerations and risks?"
+  ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    const initChat = async () => {
+      try {
+        const initData = await getChatInitialContext(id);
+        if (initData) {
+          setMessages([
+            {
+              sender: 'agent',
+              data: {
+                summary: initData.summary,
+                evidence: initData.evidence || [],
+                analysis: initData.analysis || [],
+                hypothesis: initData.hypothesis || []
+              }
+            }
+          ]);
+          if (initData.suggested_questions && initData.suggested_questions.length > 0) {
+            setSampleQuestions(initData.suggested_questions);
+          }
+        }
+      } catch (e) {
+        console.error("Could not load initial chat context", e);
+      }
+    };
+    initChat();
+  }, [id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -69,13 +97,6 @@ const Chat: React.FC = () => {
       setLoading(false);
     }
   };
-
-  const sampleQuestions = [
-    "What happens when a user places an order?",
-    "How is authentication token validation enforced?",
-    "Which services depend on PaymentService?",
-    "What is the database schema for User and Order?"
-  ];
 
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] bg-zinc-950 text-zinc-100 max-w-5xl mx-auto p-6">
