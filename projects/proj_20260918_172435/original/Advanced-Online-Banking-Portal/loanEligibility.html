@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Loan Eligibility Checker</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+
+<div class="content">
+
+<h2>Loan Eligibility Checker</h2>
+
+<input type="number" id="income" placeholder="Monthly Income">
+
+<input type="number" id="emi" placeholder="Existing EMI">
+
+<button id="checkLoan">Check Eligibility</button>
+
+<h3 id="result"></h3>
+
+</div>
+<div class="info-section">
+
+    <h3>What is a Loan?</h3>
+
+    <p>
+        A loan is an amount of money borrowed from a bank or financial institution that must be repaid over time with interest.
+        Common types of loans include home loans, car loans, personal loans, and education loans.
+    </p>
+
+    <h4>What is Loan Eligibility?</h4>
+
+    <p>
+        Loan eligibility determines whether a person qualifies for a loan based on their financial condition.
+        Banks evaluate factors like income, existing debts, and repayment capacity before approving a loan.
+    </p>
+
+    <h4>How We Check Eligibility:</h4>
+
+    <p>
+        In this system, loan eligibility is calculated based on your monthly income and existing EMI obligations.
+    </p>
+
+    <ul>
+        <li>We assume that a maximum of <strong>40%–50%</strong> of your income can be used for loan repayment</li>
+        <li>If your current EMI is low compared to your income, you are eligible</li>
+        <li>If your EMI is too high, you may not be eligible for additional loans</li>
+    </ul>
+
+    <h4>Example:</h4>
+
+    <ul>
+        <li>Monthly Income = ₹50,000</li>
+        <li>Maximum EMI allowed (50%) = ₹25,000</li>
+        <li>If existing EMI = ₹10,000 → Eligible</li>
+        <li>If existing EMI = ₹30,000 → Not Eligible</li>
+    </ul>
+
+    <h4>Why This Matters:</h4>
+
+    <ul>
+        <li>Prevents financial burden</li>
+        <li>Ensures timely repayment</li>
+        <li>Helps banks reduce risk</li>
+        <li>Improves financial planning</li>
+    </ul>
+
+</div>
+
+<script src="js/loanEligibility.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

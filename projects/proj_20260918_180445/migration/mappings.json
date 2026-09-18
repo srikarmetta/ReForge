@@ -1,0 +1,93 @@
+[
+  {
+    "source": "assistant.py",
+    "target": "src/main/java/com/reforge/app/controller/AssistantController.java",
+    "type": "controller-migration",
+    "description": "Python Handlers -> Spring Boot @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "assistant_fallback.py",
+    "target": "src/main/java/com/reforge/app/controller/AssistantFallbackController.java",
+    "type": "controller-migration",
+    "description": "Python Handlers -> Spring Boot @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "test_speak_loop.py",
+    "target": "src/main/java/com/reforge/app/controller/TestSpeakLoopController.java",
+    "type": "controller-migration",
+    "description": "Python Handlers -> Spring Boot @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "assistant.py",
+    "target": "src/main/java/com/reforge/app/model/Assistantentity.java",
+    "type": "model-migration",
+    "description": "Python Model -> JPA @Entity with Hibernate (PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": "assistant_fallback.py",
+    "target": "src/main/java/com/reforge/app/model/AssistantFallbackentity.java",
+    "type": "model-migration",
+    "description": "Python Model -> JPA @Entity with Hibernate (PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": "test_speak_loop.py",
+    "target": "src/main/java/com/reforge/app/model/TestSpeakLoopentity.java",
+    "type": "model-migration",
+    "description": "Python Model -> JPA @Entity with Hibernate (PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": "test_llm.py",
+    "target": "src/test/java/com/reforge/app/LlmTest.java",
+    "type": "test-migration",
+    "description": "Source Tests -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "test_mic.py",
+    "target": "src/test/java/com/reforge/app/MicTest.java",
+    "type": "test-migration",
+    "description": "Source Tests -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "test_speak_loop.py",
+    "target": "src/test/java/com/reforge/app/SpeakLoopTest.java",
+    "type": "test-migration",
+    "description": "Source Tests -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "test_stt.py",
+    "target": "src/test/java/com/reforge/app/SttTest.java",
+    "type": "test-migration",
+    "description": "Source Tests -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "test_tts.py",
+    "target": "src/test/java/com/reforge/app/TtsTest.java",
+    "type": "test-migration",
+    "description": "Source Tests -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "requirements.txt",
+    "target": "pom.xml",
+    "type": "build-migration",
+    "description": "Python dependencies -> Maven pom.xml (Spring Boot, JPA, PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": ".env",
+    "target": "src/main/resources/application.properties",
+    "type": "config-migration",
+    "description": "Environment configs -> Spring application.properties",
+    "risk": "Low"
+  }
+]

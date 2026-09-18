@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Credit Score Calculator</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+
+<div class="content">
+
+<h2>Credit Score Calculator</h2>
+
+<input type="number" id="history" placeholder="Payment History (%)">
+
+<input type="number" id="usage" placeholder="Credit Usage (%)">
+
+<button id="calc">Calculate Score</button>
+
+<h3 id="score"></h3>
+
+</div>
+<div class="info-section">
+
+    <h3>What is a Credit Score?</h3>
+
+    <p>
+        A credit score is a numerical value that represents your creditworthiness.
+        It helps banks and financial institutions decide whether to approve your loan or credit card application.
+    </p>
+
+    <h4>Score Range:</h4>
+    <ul>
+        <li>750+ → Excellent</li>
+        <li>650 – 749 → Good</li>
+        <li>550 – 649 → Average</li>
+        <li>Below 550 → Poor</li>
+    </ul>
+
+    <h4>Factors Affecting Credit Score:</h4>
+    <ul>
+        <li><strong>Payment History:</strong> Timely payment of EMIs and bills</li>
+        <li><strong>Credit Utilization:</strong> How much credit you use out of your limit</li>
+        <li><strong>Credit Age:</strong> How long you have been using credit</li>
+        <li><strong>New Credit:</strong> Number of recent loan/credit applications</li>
+    </ul>
+
+    <h4>How We Calculate Credit Score:</h4>
+
+    <p>
+        In this system, we use a simplified model based on two important factors:
+    </p>
+
+    <ul>
+        <li><strong>Payment History (70%)</strong> → Higher value improves score</li>
+        <li><strong>Credit Usage (30%)</strong> → Lower usage improves score</li>
+    </ul>
+
+    <p><strong>Formula Used:</strong></p>
+
+    <p style="background:#eef2ff; padding:10px; border-radius:8px;">
+        Credit Score = (0.7 × Payment History) + (0.3 × (100 − Credit Usage))
+    </p>
+
+    <h4>Example:</h4>
+    <ul>
+        <li>Payment History = 80%</li>
+        <li>Credit Usage = 40%</li>
+        <li>Score = (0.7 × 80) + (0.3 × 60) = 56 + 18 = 74</li>
+    </ul>
+
+    <h4>Why Credit Score is Important:</h4>
+    <ul>
+        <li>Determines loan approval</li>
+        <li>Affects interest rates</li>
+        <li>Impacts credit card eligibility</li>
+        <li>Reflects financial discipline</li>
+    </ul>
+
+</div>
+
+<script src="js/creditScore.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

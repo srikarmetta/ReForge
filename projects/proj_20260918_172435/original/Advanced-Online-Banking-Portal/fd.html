@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FD Calculator</title>
+<link rel="stylesheet" href="css/style.css">
+    <style>
+ body {
+    margin: 0;
+    font-family: Arial;
+    background: #f4f6f8;
+}
+
+/* CENTER FIX */
+.page {
+    display: flex;
+    justify-content: center;   /* horizontal center */
+    align-items: center;       /* vertical center */
+    min-height: 100vh;         /* full screen */
+}
+
+/* CARD STYLE */
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    width: 360px;
+}
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 12px gray;
+            width: 360px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            font-size: 12px;
+            background: #eef6ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #27ae60;
+        }
+
+        .result {
+            margin-top: 15px;
+            background: #eafaf1;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .formula {
+            font-size: 11px;
+            color: #555;
+            margin-top: 10px;
+            background: #fff8dc;
+            padding: 8px;
+            border-radius: 5px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+<div class="page">
+<div class="box">
+
+    <h2>FD Calculator</h2>
+
+    <!-- INFO SECTION -->
+    <div class="info">
+        💡 <b>Fixed Deposit (FD)</b> is a banking investment where money is deposited for a fixed time at a fixed interest rate.<br><br>
+
+        💰 <b>Maturity Amount:</b> It is the final amount you receive after the FD period ends.  
+        It includes your original deposit (principal) + the interest earned over time.<br><br>
+
+        📌 In simple words:  
+        Maturity Amount = Principal + Interest Earned
+    </div>
+
+    <!-- INPUT FIELDS -->
+    <input type="number" id="p" placeholder="Principal Amount (₹)">
+    <input type="number" id="r" placeholder="Interest Rate (%)">
+    <input type="number" id="t" placeholder="Time (Years)">
+
+    <button onclick="calculateFD()">Calculate</button>
+
+    <!-- RESULT -->
+    <div class="result" id="result"></div>
+
+    <!-- FORMULA -->
+    <div class="formula">
+        📌 Formula Used:<br>
+        A = P(1 + r/100)^t<br>
+        Interest = A - P
+    </div>
+
+</div>
+</div>
+<script>
+function calculateFD() {
+    let P = parseFloat(document.getElementById("p").value);
+    let r = parseFloat(document.getElementById("r").value);
+    let t = parseFloat(document.getElementById("t").value);
+
+    if (isNaN(P) || isNaN(r) || isNaN(t)) {
+        document.getElementById("result").innerHTML =
+            "Please enter all values correctly!";
+        return;
+    }
+
+    let A = P * Math.pow((1 + r / 100), t);
+    let interest = A - P;
+
+    document.getElementById("result").innerHTML =
+        "Maturity Amount: ₹" + A.toFixed(2) +
+        "<br>Interest Earned: ₹" + interest.toFixed(2);
+}
+</script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

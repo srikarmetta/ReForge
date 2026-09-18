@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EMI Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="profile.html">Profile</a>
+
+<a href="fundTransfer.html">Fund Transfer</a>
+
+<a href="transactions.html">Transactions</a>
+
+<a href="miniStatement.html">Mini Statement</a>
+
+<a href="loanEligibility.html">Loan Eligibility</a>
+
+<a href="creditScore.html">Credit Score</a>
+
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+
+<a href="emi.html">EMI Calculator</a>
+
+<a href="currency.html">Currency Converter</a>
+
+<a href="services.html">Services</a>
+
+<a href="security.html">Security</a>
+
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+
+<div class="content">
+    <h2>Loan EMI Calculator</h2>
+
+    <input type="number" id="loan" placeholder="Loan Amount (₹)">
+    <input type="number" id="rate" placeholder="Interest Rate (%)">
+    <input type="number" id="years" placeholder="Loan Tenure (Years)">
+
+    <button id="emiBtn">Calculate EMI</button>
+    <button onclick="resetFields()">Reset</button>
+
+    <div id="resultBox">
+        <h3 id="emiResult"></h3>
+        <p id="totalPayment"></p>
+        <p id="totalInterest"></p>
+    </div>
+	<div class="info-section">
+
+    <h3>What is EMI?</h3>
+
+    <p>
+        EMI (Equated Monthly Installment) is the fixed amount a borrower pays every month to repay a loan.
+        It includes both the principal amount and the interest charged by the bank.
+    </p>
+
+    <h4>How EMI is Calculated:</h4>
+
+    <p>
+        EMI is calculated using a standard mathematical formula that depends on the loan amount,
+        interest rate, and tenure of the loan.
+    </p>
+
+    <p><strong>EMI Formula:</strong></p>
+
+    <p style="background:#eef2ff; padding:10px; border-radius:8px;">
+        EMI = [P × R × (1 + R)<sup>N</sup>] / [(1 + R)<sup>N</sup> − 1]
+    </p>
+
+    <h4>Where:</h4>
+    <ul>
+        <li><strong>P</strong> = Loan Amount</li>
+        <li><strong>R</strong> = Monthly Interest Rate (Annual Rate / 12 / 100)</li>
+        <li><strong>N</strong> = Number of Monthly Installments (Years × 12)</li>
+    </ul>
+
+    <h4>Example:</h4>
+    <ul>
+        <li>Loan = ₹1,00,000</li>
+        <li>Interest Rate = 10% per year</li>
+        <li>Tenure = 2 years</li>
+    </ul>
+
+    <p>
+        The EMI is calculated using the formula above and remains constant every month.
+    </p>
+
+    <h4>Why EMI is Important:</h4>
+    <ul>
+        <li>Helps plan monthly budget</li>
+        <li>Ensures disciplined repayment</li>
+        <li>Used for loans like home, car, education</li>
+        <li>Easy comparison of loan options</li>
+    </ul>
+
+</div>
+</div>
+
+<script src="js/emi.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

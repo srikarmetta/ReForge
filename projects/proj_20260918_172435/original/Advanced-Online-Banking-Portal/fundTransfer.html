@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fund Transfer</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* ===== FORM CARD ===== */
+.transfer-card {
+    width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    text-align: left;
+}
+
+/* Inputs */
+.transfer-card input,
+.transfer-card select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 14px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 15px;
+}
+
+/* Focus */
+.transfer-card input:focus,
+.transfer-card select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 5px rgba(37,99,235,0.3);
+}
+
+/* Button */
+.transfer-card button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.transfer-card button:hover {
+    background: #1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+<a href="homepage.html">Logout</a>
+</nav>
+
+<div class="content">
+
+<h2>Fund Transfer</h2>
+
+<div class="transfer-card">
+
+    <h3>Transfer Details</h3>
+
+    <input type="text" id="account" placeholder="Receiver Account Number">
+    
+    <input type="text" id="name" placeholder="Receiver Name">
+
+    <input type="text" id="ifsc" placeholder="IFSC Code">
+
+    <select id="transferType">
+        <option value="">Select Transfer Type</option>
+        <option>NEFT</option>
+        <option>RTGS</option>
+        <option>IMPS</option>
+    </select>
+
+    <input type="number" id="amount" placeholder="Amount (₹)">
+
+    <input type="text" id="remarks" placeholder="Remarks (optional)">
+
+    <button id="transferBtn">Transfer Money</button>
+
+    <p id="msg"></p>
+
+</div>
+<div class="info-section">
+
+    <h3>About Fund Transfer in Net Banking</h3>
+
+    <p>
+        Net banking allows you to transfer money securely from your bank account to another account anytime, anywhere.
+        It is fast, convenient, and eliminates the need to visit a bank branch.
+    </p>
+
+    <h4>Types of Fund Transfer:</h4>
+    <ul>
+        <li><strong>NEFT (National Electronic Funds Transfer):</strong> Used for small to medium transfers. Works in batches.</li>
+        <li><strong>RTGS (Real Time Gross Settlement):</strong> Used for large transfers (₹2 lakh and above). Instant processing.</li>
+        <li><strong>IMPS (Immediate Payment Service):</strong> Instant transfer available 24/7, even on holidays.</li>
+    </ul>
+
+    <h4>Important Points:</h4>
+    <ul>
+        <li>Ensure correct account number and IFSC code before transferring.</li>
+        <li>Transactions are secure and encrypted.</li>
+        <li>Some transfers may take time depending on bank processing.</li>
+        <li>Always keep your login credentials confidential.</li>
+    </ul>
+
+</div>
+
+</div>
+
+<script src="js/fundTransfer.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+
+</body>
+</html>

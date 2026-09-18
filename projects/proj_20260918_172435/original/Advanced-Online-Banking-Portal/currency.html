@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+
+<div class="content">
+
+<h2>Currency Converter</h2>
+
+<input type="number" id="amount" placeholder="Enter Amount">
+
+<div>
+    <input type="text" id="from" placeholder="From Currency (USD)">
+    <div id="fromList" class="suggestions"></div>
+</div>
+
+<div>
+    <input type="text" id="to" placeholder="To Currency (INR)">
+    <div id="toList" class="suggestions"></div>
+</div>
+
+<button id="convertBtn">Convert</button>
+
+<h3 id="conversionResult"></h3>
+
+</div>
+<div class="info-section">
+
+    <h3>About Currency Conversion</h3>
+
+    <p>
+        Currency conversion allows you to calculate the value of one currency in terms of another using real-time exchange rates.
+        It is widely used for international trade, travel, and online transactions.
+    </p>
+
+    <h4>How It Works:</h4>
+    <ul>
+        <li>Exchange rates are determined by global financial markets</li>
+        <li>Rates change frequently based on demand and supply</li>
+        <li>Online converters fetch live data from financial APIs</li>
+    </ul>
+
+    <h4>Popular Currency Codes:</h4>
+    <ul>
+        <li>USD – US Dollar</li>
+        <li>INR – Indian Rupee</li>
+        <li>EUR – Euro</li>
+        <li>GBP – British Pound</li>
+        <li>JPY – Japanese Yen</li>
+    </ul>
+
+    <h4>Tips:</h4>
+    <ul>
+        <li>Always verify currency codes before converting</li>
+        <li>Rates may vary slightly between banks</li>
+        <li>Use real-time conversion for accuracy</li>
+    </ul>
+
+</div>
+
+<script src="js/currency.js" defer></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

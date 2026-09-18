@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="fundTransfer.html">Fund Transfer</a>
+<a href="transactions.html">Transactions</a>
+<a href="miniStatement.html">Mini Statement</a>
+<a href="loanEligibility.html">Loan Eligibility</a>
+<a href="creditScore.html">Credit Score</a>
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+<a href="emi.html">EMI Calculator</a>
+<a href="currency.html">Currency Converter</a>
+<a href="services.html">Services</a>
+<a href="security.html">Security</a>
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+<a href="homepage.html">Logout</a>
+</nav>
+<div class="content">
+
+    <h2>Welcome Back 👋</h2>
+    <p>Your financial overview at a glance</p>
+
+    <!-- SUMMARY CARDS -->
+    <div class="dashboard-grid">
+
+        <div class="card summary">
+            <h3>Balance</h3>
+            <p class="amount">₹xxxxx</p>
+        </div>
+
+        <div class="card summary">
+            <h3>Income</h3>
+            <p class="income">+ ₹xxxxx</p>
+        </div>
+
+        <div class="card summary">
+            <h3>Expenses</h3>
+            <p class="expense">- ₹xxxxx</p>
+        </div>
+
+        <div class="card summary">
+            <h3>Credit Score</h3>
+            <p class="score">xxx</p>
+        </div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="card">
+        <h3>Quick Actions</h3>
+        <div class="actions">
+            <button onclick="location.href='fundTransfer.html'">Transfer</button>
+            <button onclick="location.href='transactions.html'">Transactions</button>
+            <button onclick="location.href='emi.html'">EMI</button>
+            <button onclick="location.href='expenseAnalyzer.html'">Analyze</button>
+        </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="card">
+        <h3>Recent Transactions</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Details</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>05 Apr</td>
+                <td>Amazon</td>
+                <td class="expense">- ₹xxxx</td>
+            </tr>
+            <tr>
+                <td>03 Apr</td>
+                <td>Salary</td>
+                <td class="income">+ ₹xxxx</td>
+            </tr>
+            <tr>
+                <td>01 Apr</td>
+                <td>Electricity</td>
+                <td class="expense">- ₹xxxx</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- LOAN -->
+    <div class="card">
+        <h3>Loan Overview</h3>
+        <p>Education Loan</p>
+        <p>Remaining: ₹xxxx</p>
+        <p>Next EMI: 10 Apr 2026</p>
+    </div>
+	<div class="card">
+        <h3>Security Reminder 🔒</h3>
+        <p>
+            Never share your OTP or PIN.<br> 
+            Always logout after using public devices.<br> 
+            Enable two-factor authentication.
+        </p>
+    </div>
+
+</div>
+
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Profile</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav>
+
+<h2>Advanced Online Banking</h2>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="profile.html">Profile</a>
+
+<a href="fundTransfer.html">Fund Transfer</a>
+
+<a href="transactions.html">Transactions</a>
+
+<a href="miniStatement.html">Mini Statement</a>
+
+<a href="loanEligibility.html">Loan Eligibility</a>
+
+<a href="creditScore.html">Credit Score</a>
+
+<a href="expenseAnalyzer.html">Expense Analyzer</a>
+
+<a href="emi.html">EMI Calculator</a>
+
+<a href="currency.html">Currency Converter</a>
+
+<a href="services.html">Services</a>
+
+<a href="security.html">Security</a>
+
+<a href="changePassword.html">Change Password</a>
+<a href="fd.html">Fixed Deposit Calculator</a>
+<button id="darkToggle">Dark Mode</button>
+
+<a href="homepage.html">Logout</a>
+
+</nav>
+
+<div class="content">
+
+<h2>User Profile</h2>
+
+<form id="profileForm">
+
+    <!-- Personal Info -->
+    <input type="text" id="name" placeholder="Full Name">
+    <small class="error" id="nameError"></small>
+
+    <input type="date" id="dob">
+    <small class="error" id="dobError"></small>
+
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+    </select>
+    <small class="error" id="genderError"></small>
+
+    <!-- Contact Info -->
+    <input type="email" id="email" placeholder="Email">
+    <small class="error" id="emailError"></small>
+
+    <input type="text" id="phone" placeholder="Phone Number">
+    <small class="error" id="phoneError"></small>
+
+    <input type="text" id="altPhone" placeholder="Alternate Phone">
+    <small class="error" id="altPhoneError"></small>
+
+    <!-- Address -->
+    <input type="text" id="address" placeholder="Address">
+    <small class="error" id="addressError"></small>
+
+    <input type="text" id="city" placeholder="City">
+    <small class="error" id="cityError"></small>
+
+    <input type="text" id="state" placeholder="State">
+    <small class="error" id="stateError"></small>
+
+    <input type="text" id="pincode" placeholder="Pincode">
+    <small class="error" id="pincodeError"></small>
+	<br><br>
+<!-- Marital Status (Radio Buttons) -->
+<label>Marital Status:</label><br>
+<input type="radio" name="marital" value="Single"> Single
+<input type="radio" name="marital" value="Married"> Married
+<input type="radio" name="marital" value="Other"> Other
+<br><br>
+
+<!-- Services (Checkboxes) -->
+<label>Services Required:</label><br>
+<input type="checkbox" name="services" value="Net Banking"> Net Banking
+<input type="checkbox" name="services" value="Mobile Banking"> Mobile Banking
+<input type="checkbox" name="services" value="ATM Alerts"> ATM Alerts
+<input type="checkbox" name="services" value="Email Alerts"> Email Alerts
+<br><br>
+    <!-- Banking Info -->
+    <input type="text" id="account" placeholder="Account Number">
+    <small class="error" id="accountError"></small>
+
+    <input type="text" id="ifsc" placeholder="IFSC Code">
+    <small class="error" id="ifscError"></small>
+
+    <select id="accountType">
+        <option value="">Account Type</option>
+        <option>Savings</option>
+        <option>Current</option>
+    </select>
+    <small class="error" id="accountTypeError"></small>
+
+    <!-- Identity -->
+    <input type="text" id="aadhaar" placeholder="Aadhaar Number">
+    <small class="error" id="aadhaarError"></small>
+
+    <input type="text" id="pan" placeholder="PAN Number">
+    <small class="error" id="panError"></small>
+
+    <!-- Buttons -->
+    <div class="form-buttons">
+        <button type="submit">Save Profile</button>
+        <button type="reset">Reset</button>
+    </div>
+
+</form>
+
+<p id="msg"></p>
+
+</div>
+</form>
+
+<p id="msg"></p>
+
+</div>
+
+<script src="js/profile.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/sessionTimeout.js"></script>
+</body>
+</html>

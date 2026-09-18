@@ -1,0 +1,114 @@
+[
+  {
+    "source": "controllers/authController.js",
+    "target": "src/main/java/com/reforge/app/controller/AuthController.java",
+    "type": "controller-migration",
+    "description": "Express Router & Handler -> Spring @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "controllers/orderController.js",
+    "target": "src/main/java/com/reforge/app/controller/OrderController.java",
+    "type": "controller-migration",
+    "description": "Express Router & Handler -> Spring @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "controllers/userController.js",
+    "target": "src/main/java/com/reforge/app/controller/UserController.java",
+    "type": "controller-migration",
+    "description": "Express Router & Handler -> Spring @RestController + @RequestMapping",
+    "risk": "Low"
+  },
+  {
+    "source": "services/emailService.js",
+    "target": "src/main/java/com/reforge/app/service/EmailService.java",
+    "type": "service-migration",
+    "description": "JavaScript Service -> Spring @Service with Dependency Injection",
+    "risk": "Medium"
+  },
+  {
+    "source": "services/orderService.js",
+    "target": "src/main/java/com/reforge/app/service/OrderService.java",
+    "type": "service-migration",
+    "description": "JavaScript Service -> Spring @Service with Dependency Injection",
+    "risk": "Medium"
+  },
+  {
+    "source": "services/paymentService.js",
+    "target": "src/main/java/com/reforge/app/service/PaymentService.java",
+    "type": "service-migration",
+    "description": "JavaScript Service -> Spring @Service with Dependency Injection",
+    "risk": "High"
+  },
+  {
+    "source": "models/order.js",
+    "target": "src/main/java/com/reforge/app/model/Order.java",
+    "type": "model-migration",
+    "description": "Mongoose Schema -> JPA @Entity with Hibernate (PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": "models/user.js",
+    "target": "src/main/java/com/reforge/app/model/User.java",
+    "type": "model-migration",
+    "description": "Mongoose Schema -> JPA @Entity with Hibernate (PostgreSQL)",
+    "risk": "Medium"
+  },
+  {
+    "source": "middleware/auth.js",
+    "target": "src/main/java/com/reforge/app/security/AuthFilter.java",
+    "type": "middleware-migration",
+    "description": "Express Middleware -> Spring OncePerRequestFilter",
+    "risk": "High"
+  },
+  {
+    "source": "middleware/errorHandler.js",
+    "target": "src/main/java/com/reforge/app/security/ErrorhandlerFilter.java",
+    "type": "middleware-migration",
+    "description": "Express Middleware -> Spring OncePerRequestFilter",
+    "risk": "High"
+  },
+  {
+    "source": "middleware/validation.js",
+    "target": "src/main/java/com/reforge/app/security/ValidationFilter.java",
+    "type": "middleware-migration",
+    "description": "Express Middleware -> Spring OncePerRequestFilter",
+    "risk": "High"
+  },
+  {
+    "source": "tests/order.test.js",
+    "target": "src/test/java/com/reforge/app/OrderTest.java",
+    "type": "test-migration",
+    "description": "Jest -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "tests/payment.test.js",
+    "target": "src/test/java/com/reforge/app/PaymentTest.java",
+    "type": "test-migration",
+    "description": "Jest -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "tests/user.test.js",
+    "target": "src/test/java/com/reforge/app/UserTest.java",
+    "type": "test-migration",
+    "description": "Jest -> JUnit 5 + Mockito",
+    "risk": "Low"
+  },
+  {
+    "source": "package.json",
+    "target": "pom.xml",
+    "type": "build-migration",
+    "description": "npm dependencies -> Maven pom.xml (Spring Boot Starter Web, JPA, Postgres)",
+    "risk": "Medium"
+  },
+  {
+    "source": ".env.example",
+    "target": "src/main/resources/application.properties",
+    "type": "config-migration",
+    "description": "Environment variables -> Spring application.properties",
+    "risk": "Low"
+  }
+]
