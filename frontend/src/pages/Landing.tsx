@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Flame, ArrowRight, Zap, Shield, Sparkles, Layers, 
-  Upload, CheckCircle, Code2, ArrowRightLeft, FolderGit2
+  Upload, CheckCircle, Code2, ArrowRightLeft, FolderGit2,
+  AlertTriangle, XCircle, RefreshCw
 } from 'lucide-react';
-import { createDemoProject, createProject, uploadProjectZip } from '../services/api';
+import { createDemoProject, createProject, uploadProjectZip, analyzeProject } from '../services/api';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -12,16 +13,42 @@ const Landing: React.FC = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadName, setUploadName] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const checkBackend = async () => {
+    try {
+      const res = await fetch('/api/health');
+      if (res.ok) {
+        setBackendOnline(true);
+        setErrorMessage(null);
+      } else {
+        setBackendOnline(false);
+      }
+    } catch (e) {
+      setBackendOnline(false);
+    }
+  };
+
+  useEffect(() => {
+    checkBackend();
+  }, []);
 
   const handleLaunchDemo = async () => {
     try {
       setLoading(true);
+      setErrorMessage(null);
       const proj = await createDemoProject();
-      navigate(`/projects/${proj.id}`);
-    } catch (err) {
+      if (proj && proj.id) {
+        navigate(`/projects/${proj.id}`);
+      } else {
+        throw new Error('Project ID was not returned by the server');
+      }
+    } catch (err: any) {
       console.error(err);
-      // Fallback
-      navigate('/projects');
+      const msg = err.response?.data?.detail || err.message || 'Connection refused';
+      setErrorMessage(`Cannot connect to backend server (${msg}). Please verify that backend is running at http://127.0.0.1:8000.`);
+      setBackendOnline(false);
     } finally {
       setLoading(false);
     }
@@ -32,14 +59,18 @@ const Landing: React.FC = () => {
     if (!uploadName || !selectedFile) return;
     try {
       setLoading(true);
+      setErrorMessage(null);
       const proj = await createProject({ name: uploadName, source: 'upload' });
       await uploadProjectZip(proj.id, selectedFile);
+      await analyzeProject(proj.id);
+      setShowUploadModal(false);
       navigate(`/projects/${proj.id}`);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      const msg = err.response?.data?.detail || err.message || 'Upload failed';
+      setErrorMessage(`Upload failed (${msg}). Please make sure the backend server is running.`);
     } finally {
       setLoading(false);
-      setShowUploadModal(false);
     }
   };
 
@@ -78,6 +109,45 @@ const Landing: React.FC = () => {
           </button>
         </div>
       </header>
+
+      {/* Backend Offline Warning Banner */}
+      {backendOnline === false && (
+        <div className="relative z-20 mx-auto max-w-4xl w-full px-6 pt-4">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs shadow-lg">
+            <div className="flex items-center gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+              <div>
+                <span className="font-semibold">Backend server unreachable:</span> Make sure the backend server is running on <code className="px-1.5 py-0.5 rounded bg-amber-500/20 font-mono text-[11px]">http://127.0.0.1:8000</code>.
+                {errorMessage && <p className="mt-1 text-zinc-400 font-mono text-[10px]">{errorMessage}</p>}
+              </div>
+            </div>
+            <button
+              onClick={checkBackend}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-medium transition-colors text-xs whitespace-nowrap ml-4"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Retry Connection
+            </button>
+          </div>
+        </div>
+      )}
+
+      {errorMessage && backendOnline !== false && (
+        <div className="relative z-20 mx-auto max-w-4xl w-full px-6 pt-4">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs shadow-lg">
+            <div className="flex items-center gap-2.5">
+              <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="p-1 text-red-400 hover:text-red-200 text-xs"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-16 pb-24 text-center max-w-5xl mx-auto">

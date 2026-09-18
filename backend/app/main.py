@@ -35,6 +35,7 @@ async def startup_event():
     await init_db()
 
 @app.get("/health")
+@app.get("/api/health")
 async def health():
     return {"status": "healthy", "platform": "ReForge Codebase Intelligence & Software Migration"}
 
@@ -43,7 +44,15 @@ async def health():
 async def serve_spa(full_path: str):
     if full_path.startswith("api") or full_path.startswith("ws"):
         return {"error": "Not Found"}
+    target_file = os.path.join(frontend_dist, full_path)
+    if full_path and os.path.isfile(target_file):
+        return FileResponse(target_file)
     index_file = os.path.join(frontend_dist, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
-    return {"name": "ReForge API", "version": "2.0.0", "status": "running"}
+    return {
+        "name": "ReForge API",
+        "version": "2.0.0",
+        "status": "running",
+        "message": "Frontend not built yet. Run 'cd frontend && npm install && npm run build' or run Vite dev server via 'npm run dev'."
+    }

@@ -7,7 +7,7 @@ __pycache__/
 .venv/
 venv/
 node_modules/
-dist/
+# frontend/dist is intentionally committed so fresh ZIP downloads run instantly without Node.js
 
 reforge.db
 uploads/

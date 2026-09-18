@@ -9,12 +9,22 @@ export interface Project {
   created_at: string;
 }
 
+export type ProjectStatus = 'idle' | 'analyzing' | 'analyzed' | 'planning' | 'planned' | 'migrating' | 'migrated' | 'verifying' | 'verified' | 'modernizing' | 'completed' | 'failed' | 'warning';
+
+export interface AgentEvent {
+  event: string;
+  data: any;
+  timestamp?: string;
+  message?: string;
+}
+
 export interface Analysis {
   status: string;
   file_count: number;
   loc: number;
   languages?: Record<string, number>;
   frameworks?: string[];
+  controllers?: Array<{ id: string; name: string; file: string; methods?: string[] }>;
   api_routes?: Array<{ id: string; method: string; path: string; handler: string; file: string }>;
   services?: Array<{ id: string; name: string; file: string; methods: string[] }>;
   models_found?: Array<{ id: string; name: string; file: string; fields: Array<{ name: string; type: string }> }>;

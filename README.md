@@ -1,4 +1,4 @@
-﻿# ReForge
+# ReForge
 
 **Codebase Intelligence & Software Migration Platform**
 
@@ -153,14 +153,11 @@ ReForge connects code analysis, graph theory, multi-agent orchestration, and cod
 
 ## Requirements & Prerequisites
 
-Ensure the following tools are installed on your host machine:
-
-| Requirement | Minimum Version | Recommended Version | Purpose |
-|---|---|---|---|
-| **Python** | 3.10+ | 3.11.x | Backend API, AST parsing, NetworkX graph engine |
-| **Node.js** | 18.0+ | 20.x LTS | Frontend React / Vite runtime |
-| **npm** | 9.0+ | 10.x | Frontend package manager |
-| **Git** | 2.30+ | Latest | Version control & repository tracking |
+| Requirement | Minimum Version | Recommended Version | Necessity | Purpose |
+|---|---|---|---|---|
+| **Python** | 3.10+ | 3.11.x | **Required** | Backend API, AST parsing, NetworkX graph engine, static file server |
+| **Git** | 2.30+ | Latest | Optional | For cloning the repository (can also download repository ZIP) |
+| **Node.js & npm** | 18.0+ / 9.0+ | 20.x LTS | Optional | **Only required if modifying frontend source code.** Pre-compiled UI assets are included in the repository. |
 | **Operating System** | Windows 10/11, macOS 12+, or Linux (Ubuntu 20.04+) | Cross-platform compatibility |
 
 > **Note on LLMs**: ReForge is completely self-contained. It operates with a deterministic fallback engine by default (`DEMO_MODE=true`), so no external API keys or paid subscriptions are required. If you wish to enable local generative LLM inference, you can optionally connect a local [Ollama](https://ollama.ai) instance (`codellama` or `llama3`).
@@ -169,14 +166,42 @@ Ensure the following tools are installed on your host machine:
 
 ## Quick Start Guide
 
-### Step 1: Clone the Repository
+You can run ReForge using either the automated 1-Click Launchers (recommended for all users) or manual terminal commands.
+
+### Method 1: 1-Click Zero-Configuration Launch (Recommended)
+
+The repository includes self-bootstrapping scripts that automatically detect Python, create a virtual environment, install backend dependencies, and launch the web interface in your default browser.
+
+#### On Windows:
+- **Option 1**: Double-click `run.bat` in the repository root folder.
+- **Option 2** (PowerShell):
+  ```powershell
+  .\run.ps1
+  ```
+  *(If PowerShell displays a script execution policy restriction, run `powershell -ExecutionPolicy Bypass -File .\run.ps1`)*
+
+#### On macOS / Linux:
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+Once launched, the browser opens automatically to:
+**`http://localhost:8000`**
+
+---
+
+### Method 2: Manual Developer Setup
+
+If you want to run the backend and frontend development servers separately with hot module reloading:
+
+#### Step 1: Clone or Extract the Repository
 ```bash
 git clone https://github.com/srikarmetta/ReForge.git
 cd ReForge
 ```
 
-### Step 2: Configure Environment Variables
-Copy the example environment configuration:
+#### Step 2: Configure Environment Variables
 ```bash
 # On Linux / macOS
 cp .env.example .env
@@ -184,65 +209,68 @@ cp .env.example .env
 # On Windows (PowerShell)
 Copy-Item .env.example .env
 ```
-The default `.env` file is ready to run out-of-the-box with zero configuration needed.
+*(The default `.env` file works out-of-the-box with zero edits required.)*
 
-### Step 3: Backend Setup
-Set up the Python virtual environment and install dependencies:
-
+#### Step 3: Start the Backend Server (Terminal 1)
 ```bash
-# Navigate to backend directory
+# Navigate to backend
 cd backend
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv .venv
 
-# Activate virtual environment:
 # On Windows (PowerShell):
 .\.venv\Scripts\Activate.ps1
 # On Linux / macOS:
 source .venv/bin/activate
 
-# Install required dependencies
+# Install backend dependencies
 pip install -r requirements.txt
-```
 
-### Step 4: Frontend Setup
-Build the production React UI assets:
-
-```bash
-# Navigate to frontend directory (from project root)
-cd ../frontend
-
-# Install dependencies
-npm install
-
-# Build production assets
-npm run build
-```
-
-### Step 5: Launch ReForge
-You can start the full-stack server using the provided launch script or directly via Uvicorn:
-
-**Option A — Windows Launch Script (from repository root):**
-```powershell
-.\run.ps1
-```
-
-**Option B — Direct Uvicorn Launch (from `backend/` directory with virtualenv activated):**
-```bash
-cd backend
+# Start FastAPI backend on port 8000
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Open your browser to:
-**`http://localhost:8000`**
-
-*(Optional)* If you wish to run the Vite hot-reloading development server alongside the backend:
+#### Step 4: Start the Frontend Development Server (Terminal 2)
 ```bash
+# From the repository root:
 cd frontend
+
+# Install Node dependencies
+npm install
+
+# Start the Vite development server
 npm run dev
 ```
-Navigate to `http://localhost:5173` (API requests are automatically proxied to port 8000).
+
+Open your browser to:
+**`http://localhost:5173`** (Vite automatically proxies API requests to `http://127.0.0.1:8000`).
+
+---
+
+## Troubleshooting & FAQs
+
+### 1. The home page loads, but clicking "1-Click Demo" or "Upload Project" shows an offline warning or does nothing.
+- **Cause**: The React web interface cannot connect to the FastAPI backend server.
+- **Solution**:
+  1. Verify that the backend server is running in a terminal without errors.
+  2. Test backend responsiveness by opening `http://127.0.0.1:8000/api/health` in your browser. It should return `{"status":"healthy"}`.
+  3. If you used `npm run dev`, make sure your backend is running on `127.0.0.1:8000`. The Vite proxy targets `http://127.0.0.1:8000` directly.
+  4. Ensure a local firewall or antivirus is not blocking port 8000.
+
+### 2. PowerShell displays "running scripts is disabled on this system".
+- **Cause**: Windows PowerShell default execution policy restricts unsigned `.ps1` scripts.
+- **Solution**: Run the script with execution policy bypass:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File .\run.ps1
+  ```
+  Or simply double-click `run.bat`, which runs in Windows Command Prompt without PowerShell restrictions.
+
+### 3. Port 8000 is already in use.
+- **Solution**: Terminate any lingering process on port 8000 or launch on an alternate port:
+  ```bash
+  python -m uvicorn app.main:app --host 127.0.0.1 --port 8080
+  ```
 
 ---
 
@@ -334,7 +362,9 @@ ReForge/
 ├── sample-project/                 # Built-in sample legacy application for testing
 ├── .env.example                    # Sample environment configuration template
 ├── .gitignore                      # Git exclusion rules
-├── run.ps1                         # Launch script for Windows
+├── run.bat                         # Batch 1-click launch script (Windows double-click)
+├── run.ps1                         # PowerShell 1-click launch script (Windows)
+├── run.sh                          # Bash 1-click launch script (macOS / Linux)
 └── README.md                       # Platform documentation
 ```
 
